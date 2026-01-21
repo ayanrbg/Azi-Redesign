@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Header("Chat Manager")]
-    [SerializeField] private ChatManager chatManager;
+    //[SerializeField] private ChatManager chatManager;
 
 
     [Space]
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus.OnRoomUpdated += UpdateRoom;
-        EventBus.OnChatMessage += chatManager.OnChatMessage;
+        //EventBus.OnChatMessage += chatManager.OnChatMessage;
         EventBus.OnAutoTimer += GameStartTimer;
         EventBus.OnCancelAutoTimer += GameCancelAutoTimer;
         EventBus.OnRoleReceived += DisplayYourRole;
@@ -80,8 +80,8 @@ public class GameManager : MonoBehaviour
         EventBus.OnPhaseUpdated += ShowGamePhase;
         EventBus.OnNightAction += ShowNightVotePlayersList;
         EventBus.OnVoteStateUpdated += ShowVoteState;
-        EventBus.OnNightEnd += chatManager.ShowNightDeaths;
-        EventBus.OnDayEnd += chatManager.ShowDayEnd;
+        //EventBus.OnNightEnd += chatManager.ShowNightDeaths;
+        //EventBus.OnDayEnd += chatManager.ShowDayEnd;
         EventBus.OnGameOver += ShowWinner;
         EventBus.OnTimerPhaseUpdated += UpdateTimer;
 
@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         EventBus.OnRoomUpdated -= UpdateRoom;
-        EventBus.OnChatMessage -= chatManager.OnChatMessage;
+        //EventBus.OnChatMessage -= chatManager.OnChatMessage;
         EventBus.OnAutoTimer -= GameStartTimer;
         EventBus.OnCancelAutoTimer -= GameCancelAutoTimer;
         EventBus.OnRoleReceived -= DisplayYourRole;
@@ -100,8 +100,8 @@ public class GameManager : MonoBehaviour
         EventBus.OnPhaseUpdated -= ShowGamePhase;
         EventBus.OnNightAction -= ShowNightVotePlayersList;
         EventBus.OnVoteStateUpdated -= ShowVoteState;
-        EventBus.OnNightEnd -= chatManager.ShowNightDeaths;
-        EventBus.OnDayEnd -= chatManager.ShowDayEnd;
+        //EventBus.OnNightEnd -= chatManager.ShowNightDeaths;
+        //EventBus.OnDayEnd -= chatManager.ShowDayEnd;
         EventBus.OnGameOver -= ShowWinner;
         EventBus.OnTimerPhaseUpdated -= UpdateTimer;
     }
@@ -144,8 +144,8 @@ public class GameManager : MonoBehaviour
     if (roomUpdateResponse == null)
         return;
     
-    chatManager.OnPlayerEnter(roomUpdateResponse.player_enter.username);
-    chatManager.OnPlayerLeft(roomUpdateResponse.player_left.username);
+    //chatManager.OnPlayerEnter(roomUpdateResponse.player_enter.username);
+    //chatManager.OnPlayerLeft(roomUpdateResponse.player_left.username);
 
     UpdatePlayers(roomUpdateResponse.players);
     ui.playerCountText.text =
@@ -250,14 +250,14 @@ public class GameManager : MonoBehaviour
 
                 ui.SetChatBlockPanel(false);
 
-                chatManager.AddDaySeparator();
+                //chatManager.AddDaySeparator();
                 break;
             case "night":
                 phaseHandlerScript.SetNightTimer(phaseUpdateResponse.duration);
                 ui.DisableVoteDayPlayersPanel();
                 ui.SetChatBlockPanel(true);
 
-                chatManager.AddNightSeparator();
+                //chatManager.AddNightSeparator();
                 
                 break;
             case "vote":
@@ -442,12 +442,12 @@ public class GameManager : MonoBehaviour
         if (response.winner == "mafia")
         {
             ShowRoleMafia(redYourRoleText, "Победила мафия!");
-            chatManager.AddSystemMessage("Мафия побеждает");
+            //chatManager.AddSystemMessage("Мафия побеждает");
         }
         else
         {
             ShowRoleCitizen(blueYourRoleText, "Победили мирные!");
-            chatManager.AddSystemMessage("Мирные побеждают");
+            //chatManager.AddSystemMessage("Мирные побеждают");
         }
     }
     #endregion
