@@ -12,6 +12,7 @@ public class AuthManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI errorLogin;
     [Header("Login")]
     [SerializeField] private GameObject loginPanel;
+    //hello
     [SerializeField] private TMP_InputField loginInputField;
     [SerializeField] private TMP_InputField passwordInputField;
     [SerializeField] private TextMeshProUGUI errorCorrect;
