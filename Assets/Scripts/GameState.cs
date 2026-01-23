@@ -1,6 +1,4 @@
-﻿using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
@@ -13,11 +11,27 @@ public class GameState : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            LoadSavedToken();
         }
         else Destroy(gameObject);
     }
+    public AuthUser userProfile;
+    #region AUTH
+    public void SetProfile(AuthResultResponse authData)
+    {
+        Debug.Log(authData.user.balance);
+        userProfile = authData.user;
+    }
+    #endregion
+    #region Rooms
+    public JoinedRoomResponse joinedRoomData;
+    public void SetJoinedRoom(JoinedRoomResponse roomResponse)
+    {
+        joinedRoomData = roomResponse;
+    }
+    #endregion
+    #region OLD
 
+    /*
     public void ResetState()
     {
         UserToken = null;
@@ -227,5 +241,6 @@ public class GameState : MonoBehaviour
 
         LoadingManager.Instance.LoadGameScene();
     }
-
+    */
+    #endregion
 }

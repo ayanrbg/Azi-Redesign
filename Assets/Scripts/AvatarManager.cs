@@ -1,12 +1,8 @@
-using TMPro;
 using UnityEngine;
-using DG.Tweening;
 
-public class GameManager : MonoBehaviour
+public class AvatarManager : MonoBehaviour
 {
-
-    public static GameManager Instance { get; private set; }
-    
+    public static AvatarManager Instance { get; private set; }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -18,5 +14,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
     }
-    
+
+    public Sprite[] avatarSprites26x26;
+    public Sprite[] avatarSprites46x46;
 }

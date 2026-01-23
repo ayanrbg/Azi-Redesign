@@ -1,528 +1,401 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using static UnityEngine.Audio.IAudioGenerator;
 
-// ================= BASE =================
+#region BASE
 
 [Serializable]
-public class BaseMessage
+public class WsMessage
 {
     public string type;
 }
 
-// ================= CLIENT -> SERVER =================
-
 [Serializable]
-public class RegisterRequest : BaseMessage
+public class WsMessage<T> : WsMessage
 {
-    public string username;
-    public string password;
-    public string password_confirm;
+    public T data;
 }
 
-[Serializable]
-public class LoginRequest : BaseMessage
-{
-    public string username;
-    public string password;
-}
+#endregion
+
+// =====================================================
+// CLIENT → SERVER
+// =====================================================
+
+#region AUTH
 
 [Serializable]
-public class AuthRequest : BaseMessage
+public class AuthRequest : WsMessage
 {
     public string token;
 }
 [Serializable]
-public class LoginFailedResponse : BaseMessage
+public class AuthFailed : WsMessage
 {
     public string message;
+    public Error errors;
 }
 [Serializable]
-public class RegisterFailedResponse : BaseMessage
+public class Error
 {
-    public string message;
-}
-
-[Serializable]
-public class GetRoomsRequest : BaseMessage
-{
-    public string token;
+    public string[] email;
 }
 
+
+#endregion
+
+#region ROOMS
+
+// ---------- CREATE ROOM ----------
+
 [Serializable]
-public class CreateRoomRequest : BaseMessage
+public class CreateRoomData
 {
-    public string token;
     public string name;
-    public int min_players;
-    public int max_players;
-    public int level;
-    public int mafia_count;
-    public string[] roles;
+    public int bet;
+    public string password;
+    public int maxPlayers;
+    public string icon; // H, D, C, S
 }
 
 [Serializable]
-public class JoinRoomRequest : BaseMessage
+public class CreateRoomRequest : WsMessage<CreateRoomData> { }
+
+// ---------- GET ROOMS ----------
+
+[Serializable]
+public class GetRoomsRequest : WsMessage { }
+
+// ---------- JOIN ROOM ----------
+
+[Serializable]
+public class JoinRoomData
 {
-    public string token;
-    public int roomId;
+    public string roomId;
     public string password;
 }
 
 [Serializable]
-public class LeaveRoomRequest : BaseMessage
+public class JoinRoomRequest : WsMessage
 {
-    public string token;
-}
-
-[Serializable]
-public class StartGameRequest : BaseMessage
-{
-    public string token;
-}
-
-[Serializable]
-public class SendChatRequest : BaseMessage
-{
-    public string token;
-    public string text;
-}
-
-[Serializable]
-public class DayVoteRequest : BaseMessage
-{
-    public string token;
-    public int targetId;
-}
-
-[Serializable]
-public class NightActionRequest : BaseMessage
-{
-    public string token;
-    public int targetId;
-}
-
-// ================= SERVER -> CLIENT =================
-
-[Serializable]
-public class LoginSuccessResponse : BaseMessage
-{
-    public string token;
-}
-
-[Serializable]
-public class AuthSuccessResponse : BaseMessage
-{
-    public int userId;
-    public UserData userData;
+    public JoinRoomData data;
 
 }
 
+// ---------- LEAVE ROOM ----------
+
 [Serializable]
-public class UserData
+public class LeaveRoomRequest : WsMessage { }
+
+#endregion
+
+#region GAME FLOW
+
+// ---------- READY ----------
+
+[Serializable]
+public class ReadyRequest : WsMessage { }
+
+// ---------- DECIDE PLAYING ----------
+
+[Serializable]
+public class DecidePlayingData
 {
-    public string username;
+    public bool play;
+}
+
+[Serializable]
+public class DecidePlayingRequest : WsMessage<DecidePlayingData> { }
+
+// ---------- DISCARD CARD ----------
+
+[Serializable]
+public class DiscardCardData
+{
+    public int cardIndex;
+}
+
+[Serializable]
+public class DiscardCardRequest : WsMessage<DiscardCardData> { }
+
+// ---------- BID ACTION ----------
+
+[Serializable]
+public class BidActionData
+{
+    public string action; // raise | pass
+}
+
+[Serializable]
+public class BidActionRequest : WsMessage<BidActionData> { }
+
+// ---------- PLAY CARD ----------
+
+[Serializable]
+public class PlayCardData
+{
+    public int cardIndex;
+}
+
+[Serializable]
+public class PlayCardRequest : WsMessage<PlayCardData> { }
+
+// ---------- DECLARE RAZNOMAST ----------
+
+[Serializable]
+public class DeclareRaznomastRequest : WsMessage { }
+
+// ---------- INVITE AZI ----------
+
+[Serializable]
+public class InviteAziData
+{
+    public int playerId;
+}
+
+[Serializable]
+public class InviteAziRequest : WsMessage<InviteAziData> { }
+
+#endregion
+
+// =====================================================
+// SERVER → CLIENT
+// =====================================================
+
+#region AUTH RESPONSE
+
+[Serializable]
+public class AuthResultResponse : WsMessage
+{
+    public bool success;
+    public AuthUser user;
+}
+
+[Serializable]
+public class AuthUser
+{
+    public int id;
+    public string name;
     public int balance;
-    public int experience;
-    public int level;
-    public int avatar_id;
+    public int coins;
 }
 
-// ---------- ROOMS ----------
+#endregion
+
+#region ROOMS RESPONSE
+
+// ---------- ROOMS LIST ----------
 
 [Serializable]
-public class GetRoomsSuccessResponse : BaseMessage
+public class RoomsListResponse : WsMessage
 {
     public RoomInfo[] rooms;
 }
 
 [Serializable]
-public class CreateRoomSuccessResponse : BaseMessage { }
-
-[Serializable]
-public class JoinRoomSuccessResponse : BaseMessage
-{
-    public RoomFullInfo room;
-}
-
-[Serializable]
-public class RoomUpdateResponse : BaseMessage
-{
-    public RoomPlayer[] players;
-    public int playerCount;
-    public RoomPlayer player_enter;
-    public RoomPlayer player_left;
-    public int maxPlayerCount;
-}
-
-// ---------- CHAT ----------
-
-[Serializable]
-public class ChatMessageResponse : BaseMessage
-{
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public string text;
-    public string time;
-}
-
-// ---------- GAME ----------
-[Serializable]
-public class AutoStartResponse : BaseMessage
-{
-    public int seconds;
-}
-
-[Serializable]
-public class DayPlayersListResponse : BaseMessage
-{
-    public int day;
-    public VotePlayer[] players;
-    public DayStats stats;
-}
-
-[Serializable]
-public class PhaseUpdateResponse : BaseMessage
-{
-    public string phase;
-    public int duration;
-}
-
-[Serializable]
-public class YourRoleResponse : BaseMessage
-{
-    public string role;
-    public int[] mafiaList;
-}
-
-[Serializable]
-public class NightActionStartResponse : BaseMessage
-{
-    public string role;
-    public int duration;
-    public VotePlayer[] players;
-}
-
-[Serializable]
-public class DayEndSummaryResponse : BaseMessage
-{
-    public VotePair[] votes;
-    public KilledPlayer killed;
-}
-[Serializable]
-public class VotePair
-{
-    public VoteUser from;
-    public VoteUser to;
-}
-[Serializable]
-public class VoteUser
-{
-    public int user_id;
-    public string username;
-    public int avatar_id;
-}
-
-
-[Serializable]
-public class NightEndSummaryResponse : BaseMessage
-{
-    public KilledPlayer[] deaths;
-    public KilledPlayer healed;
-    public KilledPlayer blocked;
-}
-
-[Serializable]
-public class VoteStateUpdateResponse : BaseMessage
-{
-    public string voteType;
-    public VoteResultPlayer[] players;
-}
-[Serializable]
-public class GameOverResponse : BaseMessage
-{
-    public string winner;
-    public GameResultPlayer[] players;
-}
-// ---------- PHASE TIMER ----------
-
-[Serializable]
-public class PhaseTimerResponse : BaseMessage
-{
-    public string phase;
-    public int seconds_left;
-}
-
-// ---------- ROOM INFO (RECONNECT) ----------
-
-[Serializable]
-public class RoomInfoResponse : BaseMessage
-{
-    public RoomFullInfo room;
-}
-
-
-// ================= MODELS =================
-[Serializable]
-public class RoomInviteInfo
-{
-    public int id;
-    public string name;
-    public int level;
-    public string[] roles;
-}
-[Serializable]
 public class RoomInfo
 {
-    public int id;
+    public string id;
     public string name;
-    public int level;
-    public int min_players;
-    public int max_players;
-    public string[] roles;
-    public int current_players;
+    public int bet;
     public bool hasPassword;
-    public bool game_started;
+    public int players;
+    public int maxPlayers;
+    public string icon;
+    public string status;
+}
+
+// ---------- ROOM CREATED ----------
+
+[Serializable]
+public class RoomCreatedResponse : WsMessage
+{
+    public int roomId;
+}
+
+// ---------- JOINED ROOM ----------
+
+[Serializable]
+public class JoinedRoomResponse : WsMessage
+{
+    public RoomState room;
 }
 
 [Serializable]
-public class RoomFullInfo
+public class RoomState
 {
     public int id;
     public string name;
-    public string password;
-    public int min_players;
-    public int max_players;
-    public int level;
-    public string[] roles;
-    public int created_by;
-    public string created_at;
-    public string phase;
-    public string phase_end_time;
-    public bool game_started;
-    public int alive_count;
-    public int mafia_count;
-    public int playerCount;
+    public int bet;
+    public int maxPlayers;
+    public string icon;
     public RoomPlayer[] players;
+    public string status;
 }
 
 [Serializable]
 public class RoomPlayer
 {
     public int id;
-    public string username;
-    public int avatar_id;
+    public string name;
+    public bool ready;
+    public int balance;
 }
 
-[Serializable]
-public class VotePlayer
-{
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public bool is_mafia;
-}
+// ---------- ROOM UPDATE ----------
 
 [Serializable]
-public class VoteResultPlayer
+public class RoomUpdateResponse : WsMessage
 {
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public int votes;
-    public bool is_mafia;
-}
-[Serializable]
-public class GameResultPlayer
-{
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public string role;
-    public bool is_alive;
+    public RoomState room;
 }
 
-[Serializable]
-public class KilledPlayer
-{
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public string role;
-}
+#endregion
+
+#region GAME RESPONSE
+
+// ---------- CARDS DEALT ----------
 
 [Serializable]
-public class DayStats
+public class CardsDealtResponse : WsMessage
 {
-    public int alive_peaceful;
-    public int dead_peaceful;
-    public int alive_mafia;
-    public int dead_mafia;
-}
-// ---------- PROFILE ----------
-[Serializable]
-public class GetUserStatsResponse : BaseMessage
-{
-    public int user_id;
-    public string token;
-}
-[Serializable]
-public class UserStats : BaseMessage 
-{
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public int level;
-    public ProfileStats stats;
-}
-[Serializable]
-public class ProfileStats
-{
-    public int games_played;
-    public int mafia_games;
-    public int mafia_wins;
-    public int peaceful_games;
-    public int peaceful_wins;
-}
-// ---------- AVATAR SHOP ----------
-[Serializable]
-public class AvatarShopRequest : BaseMessage
-{
-    public string token;
-}
-[Serializable]
-public class ChangeAvatarRequest : BaseMessage
-{
-    public string token;
-    public int avatar_id;
-}
-// ---------- RATING ----------
-[Serializable]
-public class RatingRequest : BaseMessage
-{
-    public int limit;
-    public string token;
-}
-[Serializable]
-public class RatingResultResponse : BaseMessage
-{
-    public RatingPlayer[] top;
-    public RatingPlayer me;
+    public string[] cards;
+    public string trump;
+    public int dealer;
 }
 
-[Serializable]
-public class RatingPlayer
-{
-    public string place;
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public int experience;
-}
-// ---------- FRIEND REQUEST SENT ----------
+// ---------- REQUEST PLAY DECISION ----------
 
 [Serializable]
-public class FriendRequestSentResponse : BaseMessage
-{
-    public int to_user_id;
-}
-// ---------- FRIEND REQUESTS LIST ----------
+public class RequestPlayDecisionResponse : WsMessage { }
+
+// ---------- PLAYERS DECIDED ----------
 
 [Serializable]
-public class FriendRequestsListResponse : BaseMessage
+public class PlayersDecidedResponse : WsMessage
 {
-    public FriendRequest[] requests;
+    public int[] playingPlayers;
 }
+
+// ---------- REQUEST DISCARD ----------
+
 [Serializable]
-public class GetFriendRequestsResponse : BaseMessage
+public class RequestDiscardResponse : WsMessage { }
+
+// ---------- BIDDING STARTED ----------
+
+[Serializable]
+public class BiddingStartedResponse : WsMessage
 {
-    public string token;
+    public int currentBidder;
+    public int pot;
+    public int raiseCount;
 }
+
+// ---------- BID ACTION RESULT ----------
+
 [Serializable]
-public class FriendRequest
+public class BidActionResultResponse : WsMessage
 {
-    public int id;
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public string created_at;
-    public int level;
-}
-[Serializable]
-public class RespondFriendRequestResponse : BaseMessage
-{
-    public string token;
-    public int request_id;
+    public int player;
     public string action;
-}
-// ---------- FRIEND ADDED ----------
-
-[Serializable]
-public class FriendAddedResponse : BaseMessage
-{
-    public AddFriendUser user;
+    public int pot;
+    public int raiseCount;
 }
 
-[Serializable]
-public class AddFriendUser
-{
-    public int user_id;
-    public string username;
-    public int avatar_id;
-}
-[Serializable]
-public class FriendsListResponse : BaseMessage
-{
-    public FriendUser[] friends;
-}
-[Serializable]
-public class FriendUser
-{
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public bool is_online;
-    public int level;
-}
-[Serializable]
-public class SendFriendRequest : BaseMessage
-{
-    public int to_user_id;
-    public string token;
-}
-[Serializable]
-public class SearchUsersResult : BaseMessage
-{
-    public SearchUser[] users;
-}
-[Serializable]
-public class SearchUsersRequest : BaseMessage
-{
-    public string query;
-    public string token;
-}
-[Serializable]
-public class SearchUser
-{
-    public int user_id;
-    public string username;
-    public int avatar_id;
-    public int level;
-    public bool isFriend;
-    public bool is_online;
-}
-// ---------- GAME INVITE ----------
+// ---------- BIDDING COMPLETE ----------
 
 [Serializable]
-public class GameInvite : BaseMessage
+public class BiddingCompleteResponse : WsMessage
 {
-    public RoomPlayer from;
-    public RoomInviteInfo room;
+    public int winner;
+    public int pot;
 }
+
+// ---------- GAME STARTED ----------
+
 [Serializable]
-public class SendGameInviteRequest : BaseMessage
+public class GameStartedResponse : WsMessage
 {
-    public int friend_id;
-    public string token;
+    public int currentPlayer;
+    public string trump;
 }
+
+// ---------- REQUEST MOVE ----------
+
+[Serializable]
+public class RequestMoveResponse : WsMessage
+{
+    public int[] validCards;
+}
+
+// ---------- CARD PLAYED ----------
+
+[Serializable]
+public class CardPlayedResponse : WsMessage
+{
+    public int player;
+    public string card;
+    public TrickCard[] trickCards;
+}
+
+[Serializable]
+public class TrickCard
+{
+    public int player;
+    public string card;
+}
+
+// ---------- TRICK COMPLETE ----------
+
+[Serializable]
+public class TrickCompleteResponse : WsMessage
+{
+    public int winner;
+    public Dictionary<string, int> tricks;
+}
+
+// ---------- GAME COMPLETE ----------
+
+[Serializable]
+public class GameCompleteResponse : WsMessage
+{
+    public int winner;
+    public int pot;
+    public Dictionary<string, int> newBalances;
+}
+
+// ---------- AZI ----------
+
+[Serializable]
+public class AziResponse : WsMessage
+{
+    public int[] playersWithOneTrick;
+    public string message;
+}
+
+// ---------- RAZNOMAST DECLARED ----------
+
+[Serializable]
+public class RaznomastDeclaredResponse : WsMessage
+{
+    public int player;
+}
+
+// ---------- AZI INVITE ----------
+
+[Serializable]
+public class AziInviteResponse : WsMessage
+{
+    public int from;
+    public int to;
+}
+// ---------- ERROR ----------
+
+[Serializable]
+public class ErrorResponse : WsMessage
+{
+    public string message;
+}
+
+
+#endregion

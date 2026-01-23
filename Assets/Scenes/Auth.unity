@@ -178,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0412\u043E\u0439\u0442\u0438"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 260676551e25d444a917972421e9b839, type: 2}
-  m_sharedMaterial: {fileID: -7547488806210081926, guid: 260676551e25d444a917972421e9b839, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -562,8 +562,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 260676551e25d444a917972421e9b839, type: 2}
-  m_sharedMaterial: {fileID: -7547488806210081926, guid: 260676551e25d444a917972421e9b839, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1033,7 +1033,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043B\u043E\u0433\u0438\u043D"
+  m_text: Email
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1209,8 +1209,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0417\u0430\u0440\u0435\u0433\u0435\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 260676551e25d444a917972421e9b839, type: 2}
-  m_sharedMaterial: {fileID: -7547488806210081926, guid: 260676551e25d444a917972421e9b839, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1346,8 +1346,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430..."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bb737ff0956c1e749ab77ce2f8b168b3, type: 2}
-  m_sharedMaterial: {fileID: 3649514397964523234, guid: bb737ff0956c1e749ab77ce2f8b168b3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1483,8 +1483,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0412\u043E\u0439\u0442\u0438"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 260676551e25d444a917972421e9b839, type: 2}
-  m_sharedMaterial: {fileID: -7547488806210081926, guid: 260676551e25d444a917972421e9b839, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1720,7 +1720,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1553544455}
-        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: AuthService, Assembly-CSharp
         m_MethodName: OpenLoginPanel
         m_Mode: 1
         m_Arguments:
@@ -1897,6 +1897,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 640035043}
   - {fileID: 1427480695}
   - {fileID: 636914246}
   m_Father: {fileID: 1302088958}
@@ -2395,7 +2396,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &640035043
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2408,11 +2409,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1181665636}
+  m_Father: {fileID: 458677065}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -522}
+  m_AnchoredPosition: {x: 172.00003, y: -1364.6676}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &640035044
@@ -2435,10 +2436,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "*\u041F\u0430\u0440\u043E\u043B\u0438 \u043D\u0435 \u0441\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442"
+  m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 260676551e25d444a917972421e9b839, type: 2}
-  m_sharedMaterial: {fileID: -7547488806210081926, guid: 260676551e25d444a917972421e9b839, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2730,8 +2731,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0417\u0430\u0440\u0435\u0433\u0435\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 260676551e25d444a917972421e9b839, type: 2}
-  m_sharedMaterial: {fileID: -7547488806210081926, guid: 260676551e25d444a917972421e9b839, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2941,14 +2942,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 6
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 7
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 7
   m_RegexValue: 
   m_GlobalPointSize: 42
   m_CharacterLimit: 0
@@ -3152,126 +3153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 737b343365435f84d8fd35cd91835d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCreateButton: 0
-  UserToken: 
-  PlayerProfile:
-    username: 
-    balance: 0
-    experience: 0
-    level: 0
-    avatar_id: 0
-  userId: 0
-  Rooms: []
-  CurrentRoom:
-    id: 0
-    name: 
-    password: 
-    min_players: 0
-    max_players: 0
-    level: 0
-    roles: []
-    created_by: 0
-    created_at: 
-    phase: 
-    phase_end_time: 
-    game_started: 0
-    alive_count: 0
-    mafia_count: 0
-    playerCount: 0
-    players: []
-  CurrentPlayers: []
-  roomUpdateResponse:
-    type: 
-    players: []
-    playerCount: 0
-    player_enter:
-      id: 0
-      username: 
-      avatar_id: 0
-    player_left:
-      id: 0
-      username: 
-      avatar_id: 0
-    maxPlayerCount: 0
-  CurrentProfileStats:
-    type: 
-    user_id: 0
-    username: 
-    avatar_id: 0
-    level: 0
-    stats:
-      games_played: 0
-      mafia_games: 0
-      mafia_wins: 0
-      peaceful_games: 0
-      peaceful_wins: 0
-  CurrentFriendsList:
-    type: 
-    friends: []
-  CurrentFriendsRequests:
-    type: 
-    requests: []
-  CurrentPhase:
-    type: 
-    phase: 
-    duration: 0
-  YourRole:
-    type: 
-    role: 
-    mafiaList: 
-  DayPlayersList:
-    type: 
-    day: 0
-    players: []
-    stats:
-      alive_peaceful: 0
-      dead_peaceful: 0
-      alive_mafia: 0
-      dead_mafia: 0
-  CurrentVoteState:
-    type: 
-    voteType: 
-    players: []
-  NightActionStartResponse:
-    type: 
-    role: 
-    duration: 0
-    players: []
-  dayEndSummaryResponse:
-    type: 
-    votes: []
-    killed:
-      user_id: 0
-      username: 
-      avatar_id: 0
-      role: 
-  nightEndSummaryResponse:
-    type: 
-    deaths: []
-    healed:
-      user_id: 0
-      username: 
-      avatar_id: 0
-      role: 
-    blocked:
-      user_id: 0
-      username: 
-      avatar_id: 0
-      role: 
-  voteStateUpdateResponse:
-    type: 
-    voteType: 
-    players: []
-  IsReconnecting: 0
-  IsGameStateReady: 0
-  PhaseTimer:
-    type: 
-    phase: 
-    seconds_left: 0
-  HasRoomInfo: 0
-  HasYourRole: 0
-  HasPhase: 0
-  HasDayPlayers: 0
 --- !u!1 &890538604
 GameObject:
   m_ObjectHideFlags: 0
@@ -3532,7 +3413,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1553544455}
-        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: AuthService, Assembly-CSharp
         m_MethodName: OpenRegisterPanel
         m_Mode: 1
         m_Arguments:
@@ -3621,7 +3502,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041F\u0440\u0438\u0434\u0443\u043C\u0430\u0439\u0442\u0435 \u043B\u043E\u0433\u0438\u043D"
+  m_text: Email
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4056,8 +3937,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1553544455}
-        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
-        m_MethodName: SendLogin
+        m_TargetAssemblyTypeName: AuthService, Assembly-CSharp
+        m_MethodName: Login
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4100,7 +3981,6 @@ RectTransform:
   - {fileID: 2017091780}
   - {fileID: 484394044}
   - {fileID: 51273994}
-  - {fileID: 640035043}
   m_Father: {fileID: 1427480695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4606,7 +4486,7 @@ GameObject:
   - component: {fileID: 1553544454}
   - component: {fileID: 1553544455}
   m_Layer: 0
-  m_Name: AuthManager
+  m_Name: AuthService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4636,19 +4516,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1553544453}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9639db3974f9a75428766eaecb416483, type: 3}
+  m_Script: {fileID: 11500000, guid: 1131ba32799c6e14eb6b3588202966a4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::AuthService
   registerPanel: {fileID: 1427480694}
-  loginRegisterInputField: {fileID: 863826642}
-  passwordRegisterInputField: {fileID: 1707101989}
-  confirmPasswordRegisterInputField: {fileID: 192565511}
-  errorPass: {fileID: 640035044}
-  errorLogin: {fileID: 2017091781}
   loginPanel: {fileID: 636914245}
-  loginInputField: {fileID: 1917062033}
-  passwordInputField: {fileID: 2104602556}
-  errorCorrect: {fileID: 890538606}
+  loginField: {fileID: 1917062033}
+  lPasswordField: {fileID: 2104602556}
+  registerLoginField: {fileID: 863826642}
+  rPasswordField1: {fileID: 1707101989}
+  rPasswordField2: {fileID: 192565511}
+  statusText: {fileID: 640035044}
 --- !u!1 &1558929647
 GameObject:
   m_ObjectHideFlags: 0
@@ -5005,8 +4883,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1553544455}
-        m_TargetAssemblyTypeName: AuthManager, Assembly-CSharp
-        m_MethodName: SendRegister
+        m_TargetAssemblyTypeName: AuthService, Assembly-CSharp
+        m_MethodName: Register
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5282,7 +5160,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1773899233}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -5888,14 +5766,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 6
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 7
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 7
   m_RegexValue: 
   m_GlobalPointSize: 42
   m_CharacterLimit: 0
@@ -6331,6 +6209,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2026281573}
   m_CullTransparentMesh: 1
+--- !u!1 &2038590842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2038590844}
+  - component: {fileID: 2038590845}
+  m_Layer: 0
+  m_Name: AuthManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2038590844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038590842}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 248.675, y: 379.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2038590845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038590842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9639db3974f9a75428766eaecb416483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AuthManager
 --- !u!1 &2066575368
 GameObject:
   m_ObjectHideFlags: 0
@@ -6442,8 +6364,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0412\u0445\u043E\u0434"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 260676551e25d444a917972421e9b839, type: 2}
-  m_sharedMaterial: {fileID: -7547488806210081926, guid: 260676551e25d444a917972421e9b839, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6705,6 +6627,7 @@ SceneRoots:
   - {fileID: 94798677}
   - {fileID: 616404359}
   - {fileID: 1553544454}
+  - {fileID: 2038590844}
   - {fileID: 1752857418}
   - {fileID: 885574434}
   - {fileID: 782067965}

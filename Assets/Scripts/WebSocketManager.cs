@@ -7,9 +7,8 @@ public class WebSocketManager : MonoBehaviour
 
     private NativeWebSocket.WebSocket ws;
 
-    private string userToken => GameState.Instance.UserToken;
+    //private string userToken => GameState.Instance.UserToken;
     public System.Action OnConnected;
-
 
     void Awake()
     {
@@ -20,14 +19,38 @@ public class WebSocketManager : MonoBehaviour
         }
         else Destroy(gameObject);
     }
-
-    async void Start()
+    public async void ConnectWithAuth()
     {
-        Connect();
+        ws = new NativeWebSocket.WebSocket("ws://92.53.124.96:51801");
+
+        ws.OnOpen += () =>
+        {
+            Debug.Log("WS Connected");
+            SendAuth(PlayerPrefs.GetString("token"));
+        };
+
+        ws.OnMessage += (bytes) =>
+        {
+            string json = Encoding.UTF8.GetString(bytes);
+            HandleMessage(json);
+        };
+
+        ws.OnClose += (code) => Debug.Log("WS Closed: " + code);
+        ws.OnError += (err) => Debug.LogError("WS Error: " + err);
+
+        await ws.Connect();
+    }
+    public void SendAuth(string token)
+    {
+        Send(new AuthRequest
+        {
+            type = "auth",
+            token = token
+        });
     }
     async public void Connect()
     {
-        ws = new NativeWebSocket.WebSocket("ws://89.35.125.173:8080");
+        ws = new NativeWebSocket.WebSocket("ws://92.53.124.96:51801");
 
         ws.OnOpen += () =>
         {
@@ -39,6 +62,7 @@ public class WebSocketManager : MonoBehaviour
         {
             string json = Encoding.UTF8.GetString(bytes);
             HandleMessage(json);
+            
         };
 
         ws.OnClose += (code) => Debug.Log("WS Closed: " + code);
@@ -61,12 +85,9 @@ public class WebSocketManager : MonoBehaviour
         }
 
         // 2. Чистим PlayerPrefs
-        PlayerPrefs.DeleteKey("login");
-        PlayerPrefs.DeleteKey("password");
-        PlayerPrefs.Save();
 
         // 3. Сбрасываем GameState
-        GameState.Instance.ResetState();
+        //GameState.Instance.ResetState();
 
         // 4. Переходим на Auth
         LoadingManager.Instance.LoadAuthScene();
@@ -89,246 +110,81 @@ public class WebSocketManager : MonoBehaviour
 
     // ================= SEND =================
 
-    public void SendRegister(string u, string p, string pp)
+    public void SendJoinRoom(string id, string pass)
     {
-        Send(new RegisterRequest { type = "register", username = u, password = p, password_confirm =  pp});
-        PlayerPrefs.SetString("login", u);
-        PlayerPrefs.SetString("password", p);
-        PlayerPrefs.Save();
+        Send(new JoinRoomRequest { type = "joinRoom", data = new JoinRoomData{ roomId = id, password = pass} });
     }
-
-    public void SendLogin(string u, string p)
-    {
-        Send(new LoginRequest { type = "login", username = u, password = p });
-        PlayerPrefs.SetString("login", u);
-        PlayerPrefs.SetString("password", p);
-        PlayerPrefs.Save();
-    }
-
-    public void SendAuth(string token)
-    {
-        Send(new AuthRequest { type = "auth", token = userToken });
-    }
-
     public void SendGetRooms()
     {
-        Send(new GetRoomsRequest { type = "get_rooms", token = userToken });
+        Send(new GetRoomsRequest { type = "getRooms"});
     }
-
-    public void SendCreateRoom(CreateRoomRequest req)
-    {
-        req.type = "create_room";
-        req.token = userToken;
-        Send(req);
-    }
-    public void SendGetRating()
-    {
-        RatingRequest req = new RatingRequest();
-        req.type = "get_rating";
-        req.limit = 25;
-        req.token = userToken;
-        Send(req);
-    }
-    public void SendGetFriends()
-    {
-        Send(new GetFriendRequestsResponse { type = "get_friends", token = userToken });
-    }
-    public void SendGetFriendRequests()
-    {
-        Send(new GetFriendRequestsResponse { type = "get_friend_requests", token = userToken });
-    }
-    public void SendGetAvatarShop()
-    {
-        Send(new AvatarShopRequest { type = "get_avatar_shop", token = userToken });
-    }
-    public void SendChangeAvatar(int avatarId)
-    {
-        Send(new ChangeAvatarRequest { type = "change_avatar", avatar_id = avatarId, token = userToken });
-    }
-    public void SendGetUserStats(int userId)
-    {
-        Send(new GetUserStatsResponse { type = "get_user_stats", user_id = userId,token = userToken });
-    }
-    public void SendFriendRequest(int userIdToSend)
-    {
-        Send(new SendFriendRequest { type = "send_friend_request", to_user_id = userIdToSend, token = userToken });
-    }
-    public void SendInviteGameRequest(int userIdToSend)
-    {
-        Send(new SendGameInviteRequest { type = "invite_to_game", friend_id = userIdToSend, token = userToken });
-    }
-    public void SendSearchUsers(string word)
-    {
-        Send(new SearchUsersRequest { type = "search_users", query = word, token = userToken });
-    }
-    public void SendAcceptRequest(int requestId)
-    {
-        Send(new RespondFriendRequestResponse { type = "respond_friend_request", action = "accept",
-            request_id = requestId, token = userToken });
-    }
-    public void SendDeclineRequest(int requestId)
-    {
-        Send(new RespondFriendRequestResponse
-        {
-            type = "respond_friend_request",
-            action = "decline",
-            request_id = requestId,
-            token = userToken
-        });
-    }
-    public void SendJoinRoom(int roomId, string password)
-    {
-        Send(new JoinRoomRequest
-        {
-            type = "join_room",
-            token = userToken,
-            roomId = roomId,
-            password = password
-        });
-    }
-
-    public void SendLeaveRoom()
-    {
-        Send(new LeaveRoomRequest { type = "leave_room", token = userToken });
-    }
-
-    public void SendStartGame()
-    {
-        Send(new StartGameRequest { type = "start_game", token = userToken });
-    }
-
-    public void SendChat(string text)
-    {
-        Send(new SendChatRequest { type = "send_chat", token = userToken, text = text });
-    }
-
-    public void SendDayVote(int id)
-    {
-        Send(new DayVoteRequest { type = "day_vote", token = userToken, targetId = id });
-        
-    }
-
-    public void SendNightAction(int id)
-    {
-        Send(new NightActionRequest { type = "night_action", token = userToken, targetId = id });
-        
-    }
-
     async void Send(object obj)
     {
         if (ws.State != NativeWebSocket.WebSocketState.Open) return;
         string json = JsonUtility.ToJson(obj);
         await ws.SendText(json);
+        Debug.Log(json);
     }
 
     // ================= RECEIVE =================
 
     void HandleMessage(string json)
     {
-        BaseMessage baseMsg = JsonUtility.FromJson<BaseMessage>(json);
-       
+        Debug.Log(json);
+        var baseMsg = JsonUtility.FromJson<WsMessage>(json);
+        
         switch (baseMsg.type)
         {
-            case "login_success":
-                HandleLoginSuccess(json);
+            //case "authFailed":
+            //    HandleAuthResult(json);
+            //    break;
+            case "authResult":
+                HandleAuthResult(json);
                 break;
-            case "register_success":
-                HandleRegisterSuccess(json);
+            case "roomsList":
+                HandleRoomsList(json);
                 break;
-            case "auth_success":
-                HandleAuthSuccess(json);
+            case "joinedRoom":
+                HandleJoinedRoom(json);
                 break;
-            case "login_failed":
-                HandleLoginFailed(json);
-                break;
-            case "register_failed":
-                HandleRegisterFailed(json);
-                break;
-
-            case "get_rooms_success":
-                HandleGetRooms(json);
-                break;
-
-            case "create_room_success":
-                HandleJoinRoom(json);
-                break;
-
-            case "join_room_success":
-                HandleJoinRoom(json);
-                break;
-
-            case "room_update":
-                HandleRoomUpdate(json);
-                break;
-
-            case "chat_message":
-                HandleChat(json);
-                break;
-            case "auto_start_timer":
-                HandleAutoStartTimer(json);
-                break;
-            case "auto_start_cancelled":
-                HandleCancelTimer(json);
-                break;
-            case "day_players_list":
-                HandleDayPlayers(json);
-                break;
-
-            case "phase_update":
-                HandlePhase(json);
-                break;
-
-            case "your_role":
-                HandleYourRole(json);
-                break;
-
-            case "night_action_start":
-                HandleNightAction(json);
-                break;
-            case "vote_state_update":
-                HandleVoteState(json);
-                break;
-            case "day_end_summary":
-                HandleDayEnd(json);
-                break;
-
-            case "night_end_summary":
-                HandleNightEnd(json);
-                break;
-            case "game_over":
-                HandleGameOver(json);
-                break;
-            case "room_info":
-                HandleReconnectingToGame(json);
-                break;
-            case "phase_timer":
-                HandlePhaseTimerUpdate(json);
-                break;
-            case "rating_result":
-                HandleRatingResult(json);
-                break;
-            case "friends_list":
-                HandleFriendsList(json);
-                break;
-            case "search_users_result":
-                HandleSearchUsersResult(json);
-                break;
-            case "friend_requests_list":
-                HandleFriendRequests(json);
-                break;
-            case "game_invite":
-                HandleGameInvite(json);
-                break;
-            case "user_stats":
-                HandleUserStats(json);
-                break;
-            case "avatar_shop":
-                HandleAvatarShop(json);  
+            case "error":
+                HandleError(json);
                 break;
         }
     }
 
     // ================= HANDLERS =================
+    #region Error
+    void HandleError(string json)
+    {
+        var msg = JsonUtility.FromJson<ErrorResponse>(json);
+        EventBus.RaiseError(msg);
+    }
+    #endregion
+    #region AUTH
+    void HandleAuthResult(string json)
+    {
+        var msg = JsonUtility.FromJson<AuthResultResponse>(json);
+        AuthManager.Instance.HandleAuthResult(msg);
+        GameState.Instance.SetProfile(msg);
+        EventBus.RaiseAuthResult(msg);
+    }
+    #endregion
+    #region Rooms
+    void HandleRoomsList(string json)
+    {
+        var msg = JsonUtility.FromJson<RoomsListResponse>(json);
+        EventBus.RaiseRoomsList(msg);
+    }
+    void HandleJoinedRoom(string json)
+    {
+        var msg = JsonUtility.FromJson<JoinedRoomResponse>(json);
+        GameState.Instance.SetJoinedRoom(msg);
+        EventBus.RaiseJoinedRoom(msg);
+    }
+    #endregion
+
+    /*
     #region Auth
     void HandleLoginSuccess(string json)
     {
@@ -369,13 +225,13 @@ public class WebSocketManager : MonoBehaviour
     {
         var msg = JsonUtility.FromJson<GetRoomsSuccessResponse>(json);
         EventBus.RaiseRoomsUpdated(msg.rooms);
-        GameState.Instance.SetRooms(msg.rooms);
+        //GameState.Instance.SetRooms(msg.rooms);
     }
 
     void HandleJoinRoom(string json)
     {
         var msg = JsonUtility.FromJson<JoinRoomSuccessResponse>(json);
-        GameState.Instance.SetCurrentRoom(msg);
+        //GameState.Instance.SetCurrentRoom(msg);
         
         LoadingManager.Instance.LoadGameScene();
     }
@@ -385,7 +241,7 @@ public class WebSocketManager : MonoBehaviour
     {
         var msg = JsonUtility.FromJson<RoomUpdateResponse>(json);
 
-        GameState.Instance.ApplyRoomUpdate(msg);
+        //GameState.Instance.ApplyRoomUpdate(msg);
     }
     void HandleChat(string json)
     {
@@ -499,4 +355,5 @@ public class WebSocketManager : MonoBehaviour
         EventBus.RaiseAvatarShop(msg);
     }
     #endregion
+    */
 }
