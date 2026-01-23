@@ -109,7 +109,7 @@ public class WebSocketManager : MonoBehaviour
     }
 
     // ================= SEND =================
-
+    #region Rooms
     public void SendJoinRoom(string id, string pass)
     {
         Send(new JoinRoomRequest { type = "joinRoom", data = new JoinRoomData{ roomId = id, password = pass} });
@@ -118,6 +118,18 @@ public class WebSocketManager : MonoBehaviour
     {
         Send(new GetRoomsRequest { type = "getRooms"});
     }
+    public void SendCreateRoom(string roomName, string pass, int max_players)
+    {
+        Send(new CreateRoomRequest { type = "createRoom", data = 
+            new CreateRoomData {name = roomName, password = pass, maxPlayers = max_players} });
+    }
+    #endregion
+    #region Game
+    public void SendReady()
+    {
+        Send(new ReadyRequest { type = "ready" });
+    }
+    #endregion
     async void Send(object obj)
     {
         if (ws.State != NativeWebSocket.WebSocketState.Open) return;

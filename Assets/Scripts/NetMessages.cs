@@ -130,16 +130,6 @@ public class BidActionRequest : WsMessage<BidActionData> { }
 
 // ---------- PLAY CARD ----------
 
-[Serializable]
-public class PlayCardData
-{
-    public int cardIndex;
-}
-
-[Serializable]
-public class PlayCardRequest : WsMessage<PlayCardData> { }
-
-// ---------- DECLARE RAZNOMAST ----------
 
 [Serializable]
 public class DeclareRaznomastRequest : WsMessage { }
@@ -235,7 +225,7 @@ public class RoomState
 [Serializable]
 public class RoomPlayer
 {
-    public int id;
+    public string id;
     public string name;
     public bool ready;
     public int balance;
@@ -321,11 +311,45 @@ public class GameStartedResponse : WsMessage
 }
 
 // ---------- REQUEST MOVE ----------
-
 [Serializable]
 public class RequestMoveResponse : WsMessage
 {
+    public string phase;
+
+    public string trump;
+    public CardDTO trumpCard;
+
+    public float pot;
+    public float currentBet;
+    public float baseBet;
+
+    // строкой, потому что в JSON "3"
+    public string currentPlayer;
+
+    // ⚠ Dictionary требует Newtonsoft.Json
+    public Dictionary<string, int> tricks;
+
+    public CardDTO[] yourCards;
+    public int yourTricks;
+
+    public CurrentTrickPlayDTO[] currentTrick;
+
+    public string leadSuit;
+
     public int[] validCards;
+}
+[Serializable]
+public class CurrentTrickPlayDTO
+{
+    public string playerId;
+    public CardDTO card;
+}
+[Serializable]
+public class CardDTO
+{
+    public string suit;   // C, D, H, S
+    public string rank;   // 6–A
+    public string code;   // JC, AD
 }
 
 // ---------- CARD PLAYED ----------

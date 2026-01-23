@@ -17,4 +17,5 @@ public class AvatarManager : MonoBehaviour
 
     public Sprite[] avatarSprites26x26;
     public Sprite[] avatarSprites46x46;
+    public Sprite[] avatarSprites152x152;
 }

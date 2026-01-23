@@ -5,6 +5,7 @@ public class RoomsManager : MonoBehaviour
 {
 
     [SerializeField] private EnterPasswordPanel passwordPanel;
+    [SerializeField] private CreateRoomPanel createRoomPanel;
     public static RoomsManager Instance { get; private set; }
     [SerializeField] private RoomSlot[] roomSlots;
     [SerializeField] private TextMeshProUGUI balanceText;
