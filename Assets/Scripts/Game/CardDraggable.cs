@@ -1,95 +1,149 @@
-using DG.Tweening;
+п»їusing DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class CardDraggable : MonoBehaviour, 
-    //IPointerClickHandler, 
-    IBeginDragHandler, IDragHandler 
-    //IEndDragHandler
+[RequireComponent(typeof(RectTransform))]
+public class CardDraggable : MonoBehaviour,
+    IPointerClickHandler,
+    IBeginDragHandler,
+    IDragHandler,
+    IEndDragHandler
 {
-    private Camera mainCamera;
-    private Vector3 startPosition;
+    public int cardOrderId;
+    [Header("View")]
+    [SerializeField] private Image cardImage;
+
+    [Header("Settings")]
+    [SerializeField] private float dragScale = 1.1f;
+    [SerializeField] private float returnDuration = 0.25f;
+    public float yToDrag = 160f;
+    private bool isBlocked;
+    private CanvasGroup canvasGroup;
+
+    private RectTransform rectTransform;
+    private Canvas canvas;
+
+    private Vector2 startAnchoredPos;
     private Quaternion startRotation;
-    private bool isDragging;
-    private GameManager gameManager;
+    private Transform originalParent;
+    private int originalSiblingIndex;
 
     public string cardId;
-    [HideInInspector] public SpriteRenderer cardSprite;
-    public CardManager cardManager;
+
+    private bool isDragging;
 
     private void Awake()
     {
-        mainCamera = Camera.main;
-        gameManager = FindFirstObjectByType<GameManager>();
-        cardSprite = GetComponentInChildren<SpriteRenderer>();
+        rectTransform = GetComponent<RectTransform>();
+        canvas = GetComponentInParent<Canvas>();
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public void Init(string id)
+    // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєР°СЂС‚С‹
+    public void Init(int orderId ,string code, Sprite sprite)
     {
-        cardId = id;
+        cardOrderId = orderId;
+        cardId = code;
+        cardImage.sprite = sprite;
     }
 
+    // ---------------------------
+    // DRAG
+    // ---------------------------
+    public void SetBlocked(bool blocked, float fadeDuration = 0.15f)
+    {
+        isBlocked = blocked;
+
+        // Р‘Р»РѕРєРёСЂСѓРµРј РІРІРѕРґ
+        canvasGroup.interactable = !blocked;
+        canvasGroup.blocksRaycasts = !blocked;
+
+        // Р’РёР·СѓР°Р»СЊРЅРѕРµ Р·Р°С‚РµРјРЅРµРЅРёРµ
+        float targetAlpha = blocked ? 0.5f : 1f;
+
+        canvasGroup.DOKill();
+        canvasGroup.DOFade(targetAlpha, fadeDuration);
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        startPosition = transform.position;
-        startRotation = transform.rotation;
+        if (isBlocked)
+            return;
         isDragging = true;
 
-        // Немного поднимаем карту визуально (по Z)
-        transform.position += Vector3.forward * -0.5f;
+        rectTransform.DOKill();
 
-        // Увеличиваем для визуального эффекта
-        transform.localScale = Vector3.one * 1.1f;
-        transform.DORotate(new Vector3(0, 0, 0), 0.15f);
+        startAnchoredPos = rectTransform.anchoredPosition;
+        startRotation = rectTransform.rotation;
+
+        originalParent = rectTransform.parent;
+        originalSiblingIndex = rectTransform.GetSiblingIndex();
+
+        // РџРѕРІРµСЂС… РІСЃРµС… UI
+        rectTransform.SetAsLastSibling();
+
+        // Р’РёР·СѓР°Р»СЊРЅС‹Р№ СЌС„С„РµРєС‚
+        rectTransform.DOScale(dragScale, 0.15f);
+        rectTransform.DORotateQuaternion(Quaternion.identity, 0.15f);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (isBlocked)
+            return;
         if (!isDragging) return;
 
-        // Переводим позицию курсора в мировые координаты
-        Vector3 screenPos = new Vector3(eventData.position.x, eventData.position.y, -mainCamera.transform.position.z);
-        Vector3 worldPos = mainCamera.ScreenToWorldPoint(screenPos);
-
-        // Двигаем карту по X/Y
-        transform.position = new Vector3(worldPos.x, worldPos.y, transform.position.z);
+        // РџСЂР°РІРёР»СЊРЅС‹Р№ drag РґР»СЏ UI
+        rectTransform.anchoredPosition +=
+            eventData.delta / canvas.scaleFactor;
     }
 
-    //public void OnEndDrag(PointerEventData eventData)
-    //{
-    //    isDragging = false;
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (isBlocked)
+            return;
+        isDragging = false;
 
-    //    // Возвращаем карту на место, если нельзя сбросить
-    //    bool canDrop = false;
+        bool canPlay =
+        rectTransform.anchoredPosition.y > yToDrag;
 
-    //    // Проверяем, навели ли на drop-зону
-    //    //if (gameManager.IsValiableCard(this) && gameManager.myTurn && transform.position.y > -1.5f)
-    //    {
-    //        canDrop = true;
-    //        //gameManager.OnCardDropped(this);
-    //    }
-    //    else
-    //    {
-    //        //Debug.Log(gameManager.IsValiableCard(this));
-    //    }
+        if (canPlay)
+        {
+            Debug.Log("РљР°СЂС‚Р° СЃС‹РіСЂР°РЅР° = " + cardId);
+            WebSocketManager.Instance.SendPlayCard(cardOrderId);
+            ReturnToHand();
+        }
+        else
+        {
+            ReturnToHand();
+        }
+    }
 
-    //    if (!canDrop)
-    //    {
-    //        transform.position = startPosition;
-    //    }
+    // ---------------------------
+    // RETURN
+    // ---------------------------
 
-    //    // Возвращаем масштаб и порядок
-    //    transform.localScale = Vector3.one;
-    //    transform.position = new Vector3(transform.position.x, transform.position.y, startPosition.z);
-    //    transform.DORotate(startRotation.eulerAngles, 0.2f);
-    //}
+    private void ReturnToHand()
+    {
+        rectTransform.SetParent(originalParent);
+        rectTransform.SetSiblingIndex(originalSiblingIndex);
 
-    //public void OnPointerClick(PointerEventData eventData)
-    //{
-    //    //if (gameManager != null && gameManager.isChoosingDiscard)
-    //    {
-    //        //gameManager.DiscardCard(this);
+        rectTransform.DOAnchorPos(startAnchoredPos, returnDuration)
+            .SetEase(Ease.OutCubic);
 
-    //    }
-    //}
+        rectTransform.DORotateQuaternion(startRotation, returnDuration);
+        rectTransform.DOScale(1f, returnDuration);
+    }
+
+    // ---------------------------
+    // CLICK
+    // ---------------------------
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (isBlocked)
+            return;
+        GameManager.Instance.handView.SelectCard(this);
+        GameManager.Instance.SendDiscardCard(cardOrderId);
+    }
 }

@@ -117,19 +117,17 @@ public class DiscardCardData
 [Serializable]
 public class DiscardCardRequest : WsMessage<DiscardCardData> { }
 
-// ---------- BID ACTION ----------
-
-[Serializable]
-public class BidActionData
-{
-    public string action; // raise | pass
-}
-
-[Serializable]
-public class BidActionRequest : WsMessage<BidActionData> { }
 
 // ---------- PLAY CARD ----------
-
+[Serializable]
+public class PlayCardData
+{
+    public int cardIndex;
+}
+[Serializable]
+public class PlayCardRequest : WsMessage<PlayCardData>
+{
+}
 
 [Serializable]
 public class DeclareRaznomastRequest : WsMessage { }
@@ -163,7 +161,7 @@ public class AuthResultResponse : WsMessage
 [Serializable]
 public class AuthUser
 {
-    public int id;
+    public string id;
     public string name;
     public int balance;
     public int coins;
@@ -256,10 +254,82 @@ public class CardsDealtResponse : WsMessage
 // ---------- REQUEST PLAY DECISION ----------
 
 [Serializable]
-public class RequestPlayDecisionResponse : WsMessage { }
+public class RequestPlayDecisionResponse : WsMessage
+{
+    public string phase;          // deciding
 
+    public string trump;
+    public CardDTO trumpCard;
+
+    public float pot;
+    public float currentBet;
+    public float baseBet;
+
+    // tricks: {} — может быть пустым
+    public Dictionary<string, int> tricks;
+
+    public CardDTO[] yourCards;
+    public int yourTricks;
+}
+// ---------- GAME UPDATE ----------
+[Serializable]
+public class GameUpdateResponse : WsMessage
+{
+    public string phase;          // discarding
+
+    public string trump;
+    public CardDTO trumpCard;
+
+    public float pot;
+    public float currentBet;
+    public float baseBet;
+    public string currentPlayer;
+
+    // { } может быть пустым
+    public Dictionary<string, int> tricks;
+
+    public CardDTO[] yourCards;
+    public int yourTricks;
+}
+// ---------- BID ACTION ----------
+[Serializable]
+public class BidActionData
+{
+    public string action;   // "raise" | "pass"
+
+    // Опционально: если null — сервер сам применяет currentBet * 1.5
+    public int? amount;
+}
+[Serializable]
+public class BidActionRequest : WsMessage<BidActionData>
+{
+}
+// ---------- BID REQUEST ----------
+[Serializable]
+public class RequestBidResponse : WsMessage
+{
+    public string phase;          // "bidding"
+
+    public string trump;
+    public CardDTO trumpCard;
+
+    public float pot;
+    public float currentBet;
+    public float baseBet;
+
+    // строкой, как в JSON ("3")
+    public string currentPlayer;
+
+    // может быть пустым {}
+    public Dictionary<string, int> tricks;
+
+    public CardDTO[] yourCards;
+    public int yourTricks;
+
+    // минимальная ставка для raise
+    public int minRaise;
+}
 // ---------- PLAYERS DECIDED ----------
-
 [Serializable]
 public class PlayersDecidedResponse : WsMessage
 {

@@ -121,13 +121,58 @@ public class WebSocketManager : MonoBehaviour
     public void SendCreateRoom(string roomName, string pass, int max_players)
     {
         Send(new CreateRoomRequest { type = "createRoom", data = 
-            new CreateRoomData {name = roomName, password = pass, maxPlayers = max_players} });
+            new CreateRoomData {name = roomName, password = pass, bet = 300, icon = "H", maxPlayers = max_players} });
     }
     #endregion
     #region Game
+    public void SendLeaveRoom()
+    {
+        Send(new LeaveRoomRequest { type = "leaveRoom" });
+    }
     public void SendReady()
     {
         Send(new ReadyRequest { type = "ready" });
+    }
+    public void SendDecidePlay(bool value)
+    {
+        Send(new DecidePlayingRequest { type = "decidePlaying", data = new DecidePlayingData { play = value} });
+    }
+    public void SendDiscardCard(int cardId)
+    {
+        Send(new DiscardCardRequest { type = "discardCard", data = new DiscardCardData { cardIndex = cardId } });
+    }
+    public void SendBet()
+    {
+        Send(new BidActionRequest
+        {
+            type = "bidAction",
+            data = new BidActionData
+            {
+                action = "raise",
+                amount = null
+            }
+        });
+    }
+    public void SendPlayCard(int index)
+    {
+        Send(new PlayCardRequest
+        { data = new PlayCardData 
+        {
+            cardIndex = index,
+        }
+        });
+    }
+    public void SendPass()
+    {
+        Send(new BidActionRequest
+        {
+            type = "bidAction",
+            data = new BidActionData
+            {
+                action = "pass",
+                amount = null
+            }
+        });
     }
     #endregion
     async void Send(object obj)
@@ -150,6 +195,9 @@ public class WebSocketManager : MonoBehaviour
             //case "authFailed":
             //    HandleAuthResult(json);
             //    break;
+            case "error":
+                HandleError(json);
+                break;
             case "authResult":
                 HandleAuthResult(json);
                 break;
@@ -159,8 +207,20 @@ public class WebSocketManager : MonoBehaviour
             case "joinedRoom":
                 HandleJoinedRoom(json);
                 break;
-            case "error":
-                HandleError(json);
+            case "roomUpdate":
+                HandleRoomUpdate(json);
+                break;
+            case "requestPlayDecision":
+                HandleRequestPlayDecision(json);
+                break;
+            case "requestDiscard":
+                HandleRequestDiscard(json);
+                break;
+            case "gameUpdate":
+                HandleGameUpdate(json);
+                break;
+            case "requestBid":
+                HandleRequestBid(json);
                 break;
         }
     }
@@ -195,177 +255,40 @@ public class WebSocketManager : MonoBehaviour
         EventBus.RaiseJoinedRoom(msg);
     }
     #endregion
-
-    /*
-    #region Auth
-    void HandleLoginSuccess(string json)
-    {
-        var msg = JsonUtility.FromJson<LoginSuccessResponse>(json);
-        GameState.Instance.UpdateToken(msg.token);
-        SendAuth(userToken);
-    }
-    void HandleRegisterSuccess(string json)
-    {
-        var msg = JsonUtility.FromJson<LoginSuccessResponse>(json);
-        GameState.Instance.UpdateToken(msg.token);
-        SendAuth(userToken);
-
-    }
-    void HandleAuthSuccess(string json)
-    {
-        var msg = JsonUtility.FromJson<AuthSuccessResponse>(json);
-
-        GameState.Instance.SetPlayerProfile(msg);
-        EventBus.RaiseProfileUpdated(msg.userData);
-        LoadingManager.Instance.LoadMainScene();
-
-        
-    }
-    void HandleLoginFailed(string json)
-    {
-        var msg = JsonUtility.FromJson<LoginFailedResponse>(json);
-        EventBus.RaiseLoginFailed(msg);
-    }
-    void HandleRegisterFailed(string json)
-    {
-        var msg = JsonUtility.FromJson<RegisterFailedResponse>(json);
-        EventBus.RaiseRegisterFailed(msg);
-    }
-    #endregion
-    #region RoomLobby
-    void HandleGetRooms(string json)
-    {
-        var msg = JsonUtility.FromJson<GetRoomsSuccessResponse>(json);
-        EventBus.RaiseRoomsUpdated(msg.rooms);
-        //GameState.Instance.SetRooms(msg.rooms);
-    }
-
-    void HandleJoinRoom(string json)
-    {
-        var msg = JsonUtility.FromJson<JoinRoomSuccessResponse>(json);
-        //GameState.Instance.SetCurrentRoom(msg);
-        
-        LoadingManager.Instance.LoadGameScene();
-    }
-    #endregion
-    #region Game
+    #region GAME
     void HandleRoomUpdate(string json)
     {
         var msg = JsonUtility.FromJson<RoomUpdateResponse>(json);
-
-        //GameState.Instance.ApplyRoomUpdate(msg);
+        EventBus.RaiseRoomUpdate(msg);
     }
-    void HandleChat(string json)
+    void HandleRequestPlayDecision(string json)
     {
-        var msg = JsonUtility.FromJson<ChatMessageResponse>(json);
-        EventBus.RaiseChatMessage(msg);
+        var msg = JsonUtility.FromJson<RequestPlayDecisionResponse>(json);
+        EventBus.RaiseRequestPlayDecision(msg);
     }
-    void HandleGameOver(string json)
+    void HandleRequestDiscard(string json)
     {
-        var msg = JsonUtility.FromJson<GameOverResponse>(json);
-        EventBus.RaiseGameOver(msg);
+        var msg = JsonUtility.FromJson<RequestDiscardResponse>(json);
+        EventBus.RaiseRequestDiscard(msg);
     }
-    void HandleAutoStartTimer(string json)
+    void HandleGameUpdate(string json)
     {
-        var msg = JsonUtility.FromJson<AutoStartResponse>(json);
-        EventBus.RaiseAutoTimer(msg);
+        var msg = JsonUtility.FromJson<GameUpdateResponse>(json);
+        switch (msg.phase)
+        {
+            case "discarding":
+                EventBus.RaiseGameUpdateDiscarding(msg);
+                break;
+            case "bidding":
+                EventBus.RaiseGameUpdateBidding(msg);
+                break;
+        }
     }
-    void HandleCancelTimer(string json)
+    void HandleRequestBid(string json)
     {
-        var msg = JsonUtility.FromJson<BaseMessage>(json);
-        EventBus.RaiseCancelTimer(msg);
-    }
-    void HandleDayPlayers(string json)
-    {
-        var msg = JsonUtility.FromJson<DayPlayersListResponse>(json);
-        GameState.Instance.SetDayPlayersList(msg);
-        EventBus.RaiseDayPlayersList(msg);
-    }
-    void HandleFriendRequests(string json)
-    {
-        var msg = JsonUtility.FromJson<FriendRequestsListResponse>(json);
-        GameState.Instance.SetFriendsRequests(msg);
-        EventBus.RaiseFriendsRequests(msg);
-    }
-    
-    void HandlePhase(string json)
-    {
-        var msg = JsonUtility.FromJson<PhaseUpdateResponse>(json);
-        GameState.Instance.SetPhase(msg);
-        EventBus.RaisePhaseUpdated(msg);
-    }
-    void HandleYourRole(string json)
-    {
-        var msg = JsonUtility.FromJson<YourRoleResponse>(json);
-        GameState.Instance.SetYourRole(msg);
-        EventBus.RaiseRoleReceived(msg);
-    }
-
-    void HandleNightAction(string json)
-    {
-        var msg = JsonUtility.FromJson<NightActionStartResponse>(json);
-        GameState.Instance.SetNightAction(msg);
-        EventBus.RaiseNightAction(msg);
-    }
-
-    void HandleDayEnd(string json)
-    {
-        var msg = JsonUtility.FromJson<DayEndSummaryResponse>(json);
-        GameState.Instance.SetDaySummaryResponse(msg);
-        EventBus.RaiseDayEnd(msg);
-    }
-    void HandleFriendsList(string json)
-    {
-        var msg = JsonUtility.FromJson<FriendsListResponse>(json);
-        GameState.Instance.SetCurrentFriends(msg);
-        EventBus.RaiseFriendsList(msg);
-    }
-    void HandleSearchUsersResult(string json)
-    {
-        var msg = JsonUtility.FromJson<SearchUsersResult>(json);
-        EventBus.RaiseUserSearchResult(msg);
-    }
-    void HandleNightEnd(string json)
-    {
-        var msg = JsonUtility.FromJson<NightEndSummaryResponse>(json);
-        GameState.Instance.SetNightEndSummaryResponse(msg);
-        EventBus.RaiseNightEnd(msg);
-    }
-    void HandleVoteState(string json)
-    {
-        var msg = JsonUtility.FromJson<VoteStateUpdateResponse>(json);
-        GameState.Instance.SetVoteStateUpdateResponse(msg);
-    }
-    void HandleReconnectingToGame(string json){
-        var msg = JsonUtility.FromJson<RoomInfoResponse>(json);
-        GameState.Instance.SetRoomInfo(msg);
-    }
-    void HandlePhaseTimerUpdate(string json)
-    {
-        var msg = JsonUtility.FromJson<PhaseTimerResponse>(json);
-        EventBus.RaiseTimerPhaseUpdated(msg);
-    }
-    void HandleRatingResult(string json)
-    {
-        var msg = JsonUtility.FromJson<RatingResultResponse>(json);
-        EventBus.RaiseRatingResponse(msg);
-    }
-    void HandleGameInvite(string json)
-    {
-        var msg = JsonUtility.FromJson<GameInvite>(json);
-        EventBus.RaiseGameInvite(msg);
-    }
-    void HandleUserStats(string json)
-    {
-        var msg = JsonUtility.FromJson<UserStats>(json);
-        GameState.Instance.SetProfileStats(msg);
-        EventBus.RaiseUserStats(msg);
-    }
-    void HandleAvatarShop(string json)
-    {
-        var msg = JsonUtility.FromJson<AvatarShopResponse>(json);
-        EventBus.RaiseAvatarShop(msg);
+        var msg = JsonUtility.FromJson<RequestBidResponse>(json);
+        EventBus.RaiseRequestBid(msg);
     }
     #endregion
-    */
+
 }

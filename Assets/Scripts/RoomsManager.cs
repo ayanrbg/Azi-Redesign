@@ -54,4 +54,8 @@ public class RoomsManager : MonoBehaviour
         passwordPanel.enterId = id;
         passwordPanel.gameObject.SetActive(true);
     }
+    public void OpenCreateRoomPanel()
+    {
+        createRoomPanel.gameObject.SetActive(true);
+    }
 }

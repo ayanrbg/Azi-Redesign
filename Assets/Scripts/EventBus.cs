@@ -23,5 +23,32 @@ public static class EventBus
     public static void RaiseJoinedRoom(JoinedRoomResponse msg)
         => OnJoinedRoom?.Invoke(msg);
     #endregion
+    #region GAME
+    //ROOM UPDATE
+    public static Action<RoomUpdateResponse> OnRoomUpdate;
+    public static void RaiseRoomUpdate(RoomUpdateResponse msg)
+        => OnRoomUpdate?.Invoke(msg);
+    //REQUEST PLAY DECISION
+    public static Action<RequestPlayDecisionResponse> OnRequestDecision;
+    public static void RaiseRequestPlayDecision(RequestPlayDecisionResponse msg)
+        => OnRequestDecision?.Invoke(msg);
+    //REQUEST DISCARD
+    public static Action<RequestDiscardResponse> OnRequestDiscard;
+    public static void RaiseRequestDiscard(RequestDiscardResponse msg)
+        => OnRequestDiscard?.Invoke(msg);
 
+    //GAME UPDATE DISCARDING
+    public static Action<GameUpdateResponse> OnGameUpdateDiscarding;
+    public static void RaiseGameUpdateDiscarding(GameUpdateResponse msg)
+        => OnGameUpdateDiscarding?.Invoke(msg);
+
+    //GAME UPDATE BIDDING
+    public static Action<GameUpdateResponse> OnGameUpdateBidding;
+    public static void RaiseGameUpdateBidding(GameUpdateResponse msg)
+        => OnGameUpdateBidding?.Invoke(msg);
+    //BID REQUEST 
+    public static Action<RequestBidResponse> OnRequestBid;
+    public static void RaiseRequestBid(RequestBidResponse msg)
+        => OnRequestBid?.Invoke(msg);
+    #endregion
 }
