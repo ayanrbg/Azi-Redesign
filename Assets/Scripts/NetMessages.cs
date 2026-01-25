@@ -287,6 +287,7 @@ public class GameUpdateResponse : WsMessage
 
     // { } может быть пустым
     public Dictionary<string, int> tricks;
+    public CurrentTrickPlayDTO[] currentTrick;
 
     public CardDTO[] yourCards;
     public int yourTricks;
@@ -427,16 +428,17 @@ public class CardDTO
 [Serializable]
 public class CardPlayedResponse : WsMessage
 {
-    public int player;
-    public string card;
-    public TrickCard[] trickCards;
-}
+    // кто сыграл карту
+    public string playerId;
 
-[Serializable]
-public class TrickCard
-{
-    public int player;
-    public string card;
+    // сыгранная карта
+    public CardDTO card;
+
+    // текущая взятка после хода
+    public CurrentTrickPlayDTO[] currentTrick;
+
+    // масть первого хода во взятке
+    public string leadSuit;
 }
 
 // ---------- TRICK COMPLETE ----------
@@ -444,18 +446,34 @@ public class TrickCard
 [Serializable]
 public class TrickCompleteResponse : WsMessage
 {
-    public int winner;
+    // id победителя взятки
+    public string winner;
+
+    // карта, которой выиграли взятку
+    public CardDTO winningCard;
+
+    // все карты, сыгранные в этой взятке
+    public CurrentTrickPlayDTO[] allCards;
+
+    // текущее количество взяток у игроков
+    // { "1": 0, "3": 1 }
     public Dictionary<string, int> tricks;
+
+    // номер завершённой взятки
+    public int completedTrickNumber;
 }
 
 // ---------- GAME COMPLETE ----------
 
-[Serializable]
-public class GameCompleteResponse : WsMessage
+[System.Serializable]
+public class GameWinnerResponse
 {
-    public int winner;
-    public int pot;
-    public Dictionary<string, int> newBalances;
+    public string type;                 // "gameWinner"
+    public string winner;               // id победителя
+    public string winnerName;           // имя победителя
+    public float pot;                   // общий банк
+    public Dictionary<string, int> finalTricks;   // { playerId : tricks }
+    public Dictionary<string, int> newBalances;   // { playerId : balance }
 }
 
 // ---------- AZI ----------

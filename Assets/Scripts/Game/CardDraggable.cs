@@ -29,7 +29,7 @@ public class CardDraggable : MonoBehaviour,
     private Transform originalParent;
     private int originalSiblingIndex;
 
-    public string cardId;
+    public string cardCode;
 
     private bool isDragging;
 
@@ -41,13 +41,17 @@ public class CardDraggable : MonoBehaviour,
     }
 
     // Инициализация карты
-    public void Init(int orderId ,string code, Sprite sprite)
+    public void Init(int orderId ,string code)
     {
         cardOrderId = orderId;
-        cardId = code;
-        cardImage.sprite = sprite;
+        cardCode = code;
+        Debug.Log(cardCode);
+        cardImage.sprite = GameManager.Instance.gameUIController.cardSpritesDatabase.GetSprite(cardCode);
     }
-
+    public void ChangeIndex(int index)
+    {
+        cardOrderId = index;
+    }
     // ---------------------------
     // DRAG
     // ---------------------------
@@ -107,11 +111,11 @@ public class CardDraggable : MonoBehaviour,
         bool canPlay =
         rectTransform.anchoredPosition.y > yToDrag;
 
-        if (canPlay)
+        if (canPlay && GameManager.Instance.gameUIController.isRequestMove)
         {
-            Debug.Log("Карта сыграна = " + cardId);
-            WebSocketManager.Instance.SendPlayCard(cardOrderId);
-            ReturnToHand();
+            Debug.Log("Карта сыграна = " + cardCode);
+            WebSocketManager.Instance.SendPlayCard(cardOrderId); //костыль
+            GameManager.Instance.handView.RemoveCardAt(cardOrderId);
         }
         else
         {

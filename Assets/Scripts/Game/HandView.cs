@@ -15,13 +15,13 @@ public class HandView : MonoBehaviour
     [SerializeField] private float selectOffsetY = 40f;
     [SerializeField] private float selectAnimDuration = 0.2f;
 
-    public IEnumerator AddCard(string id, string cardCode)
+    public IEnumerator AddCard(string code, string cardCode)
     {
         CardDraggable card = Instantiate(cardPrefab, spawnPoint.transform)
             .GetComponent<CardDraggable>();
 
         cards.Add(card);
-        card.Init(cards.Count-1, id, GameManager.Instance.gameUIController.cardSpritesDatabase.GetSprite(cardCode));
+        card.Init(cards.Count-1, cardCode);
 
         card.transform.localScale = Vector3.one;
         card.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
@@ -97,6 +97,19 @@ public class HandView : MonoBehaviour
         }
 
         cards.Clear();
+    }
+    public void RecalculateCardIndex(CardDTO[] serverCards)
+    {
+        for(int i = 0; i < serverCards.Length; i++)
+        {
+            foreach(var card in cards)
+            {
+                if (serverCards[i].code == card.cardCode)
+                {
+                    card.cardOrderId = i;
+                }
+            }
+        }
     }
     public void RemoveCardAt(int index)
     {

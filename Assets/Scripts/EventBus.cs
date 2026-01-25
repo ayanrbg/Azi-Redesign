@@ -46,9 +46,29 @@ public static class EventBus
     public static Action<GameUpdateResponse> OnGameUpdateBidding;
     public static void RaiseGameUpdateBidding(GameUpdateResponse msg)
         => OnGameUpdateBidding?.Invoke(msg);
+    //GAME UPDATE PLAYING
+    public static Action<GameUpdateResponse> OnGameUpdatePlaying;
+    public static void RaiseGameUpdatePlaying(GameUpdateResponse msg)
+        => OnGameUpdatePlaying?.Invoke(msg);
     //BID REQUEST 
     public static Action<RequestBidResponse> OnRequestBid;
     public static void RaiseRequestBid(RequestBidResponse msg)
         => OnRequestBid?.Invoke(msg);
+    //REQUEST MOVE
+    public static Action<RequestMoveResponse> OnRequestMove;
+    public static void RaiseRequestMove(RequestMoveResponse msg)
+        => OnRequestMove?.Invoke(msg);
+    //CARD PLAYED
+    public static Action<CardPlayedResponse> OnCardPlayed;
+    public static void RaiseCardPlayed(CardPlayedResponse msg)
+        => OnCardPlayed?.Invoke(msg);
+    //TRICK COMPLETE
+    public static Action<TrickCompleteResponse> OnTrickComplete;
+    public static void RaiseTrickComplete(TrickCompleteResponse msg)
+        => OnTrickComplete?.Invoke(msg);
+    //GAME WINNER
+    public static Action<GameWinnerResponse> OnGameWinner;
+    public static void RaiseGameWinner(GameWinnerResponse msg)
+        => OnGameWinner?.Invoke(msg);
     #endregion
 }

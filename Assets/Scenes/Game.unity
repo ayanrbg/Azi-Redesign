@@ -119,6 +119,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &30986390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 30986391}
+  - component: {fileID: 30986393}
+  m_Layer: 0
+  m_Name: spawn point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &30986391
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30986390}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 632185993}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -60}
+  m_SizeDelta: {x: 42, y: 60}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &30986393
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30986390}
+  m_CullTransparentMesh: 1
 --- !u!1 &44684794
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,7 +679,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 31.835, y: -12}
+  m_AnchoredPosition: {x: 18.620003, y: -12}
   m_SizeDelta: {x: 24, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &389148268
@@ -862,6 +906,8 @@ MonoBehaviour:
   gameUIController: {fileID: 1239786713}
   handView: {fileID: 1551484632}
   isRequestDiscard: 0
+  isFirstGameUpdate: 1
+  isGameStarted: 0
 --- !u!1 &513948380
 GameObject:
   m_ObjectHideFlags: 0
@@ -1393,6 +1439,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 950685338}
+  - {fileID: 1359440700}
+  - {fileID: 30986391}
   - {fileID: 1724585480}
   m_Father: {fileID: 1674513794}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3060,6 +3108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameUIController
   isFirstDiscard: 1
+  isRequestMove: 0
   cardSpritesDatabase: {fileID: 11400000, guid: c0205fd79ed6ee54a9e545d7a5329bae, type: 2}
   cardToCenterAnimator: {fileID: 1239786714}
   readyButton: {fileID: 937409012}
@@ -3068,6 +3117,7 @@ MonoBehaviour:
   betText: {fileID: 666569169}
   requestPlayDecisionButtons: {fileID: 2075261702}
   potPanel: {fileID: 1209690687}
+  potPanelRect: {fileID: 1209690688}
   potText: {fileID: 1369009931}
   trumpCardImage: {fileID: 564292986}
   mainPlayerSlot: {fileID: 1394511832}
@@ -3264,6 +3314,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293228443}
   m_CullTransparentMesh: 1
+--- !u!1 &1359440699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1359440700}
+  - component: {fileID: 1359440702}
+  m_Layer: 0
+  m_Name: card Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1359440700
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359440699}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 632185993}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 96.8094}
+  m_SizeDelta: {x: 42, y: 60}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1359440702
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359440699}
+  m_CullTransparentMesh: 1
 --- !u!1 &1360267654
 GameObject:
   m_ObjectHideFlags: 0
@@ -3336,7 +3430,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 63.5, y: -12}
-  m_SizeDelta: {x: 33.33, y: 24}
+  m_SizeDelta: {x: 59.76, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1369009931
 MonoBehaviour:
@@ -3358,7 +3452,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 600
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 616d9051acb797d4c824688eb5b68512, type: 2}
   m_sharedMaterial: {fileID: 3164452388106906495, guid: 616d9051acb797d4c824688eb5b68512, type: 2}
@@ -3499,9 +3593,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainPlayerSlot
   id: 0
   yourCardImage: {fileID: 950685339}
+  cardPos: {fileID: 1359440700}
   handView: {fileID: 1551484632}
   balanceText: {fileID: 260467792}
   coinsText: {fileID: 1635853536}
+  cardSpawnPoint: {fileID: 30986391}
 --- !u!114 &1394511833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3908,10 +4004,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1144501423}
+  - {fileID: 1551484631}
+  - {fileID: 2075261703}
   - {fileID: 872100436}
   - {fileID: 277998397}
-  - {fileID: 2075261703}
-  - {fileID: 1551484631}
   - {fileID: 937409013}
   m_Father: {fileID: 844354597}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4712,12 +4808,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 632185993}
   - {fileID: 1360267655}
   - {fileID: 1497214028}
   - {fileID: 588086696}
   - {fileID: 2107520604}
   - {fileID: 1246873245}
-  - {fileID: 632185993}
   m_Father: {fileID: 1450491527}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

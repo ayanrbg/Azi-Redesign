@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9199191952863475752}
   - component: {fileID: 4086755718082918276}
   - component: {fileID: 7162754168479517899}
+  - component: {fileID: 1553173927642441485}
   m_Layer: 0
   m_Name: card
   m_TagString: Untagged
@@ -88,6 +89,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bbfc7a350464ad48adb1905b28dbd2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardDraggable
-  cardId: 
-  cardDatabase: {fileID: 11400000, guid: c0205fd79ed6ee54a9e545d7a5329bae, type: 2}
+  cardOrderId: 0
   cardImage: {fileID: 4086755718082918276}
+  dragScale: 1.1
+  returnDuration: 0.25
+  yToDrag: 160
+  cardId: 
+--- !u!225 &1553173927642441485
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076529957688421892}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

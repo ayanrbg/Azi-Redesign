@@ -11,7 +11,7 @@ public class TimerUI : MonoBehaviour
     }
 
     [Header("UI")]
-    [SerializeField] private Image fillImage;
+    public Image fillImage;
     [SerializeField] private TextMeshProUGUI timeText;
 
     [Header("Settings")]

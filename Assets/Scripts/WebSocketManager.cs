@@ -156,7 +156,7 @@ public class WebSocketManager : MonoBehaviour
     public void SendPlayCard(int index)
     {
         Send(new PlayCardRequest
-        { data = new PlayCardData 
+        { type = "playCard", data = new PlayCardData 
         {
             cardIndex = index,
         }
@@ -222,6 +222,18 @@ public class WebSocketManager : MonoBehaviour
             case "requestBid":
                 HandleRequestBid(json);
                 break;
+            case "requestMove":
+                HandleRequestMove(json);
+                break;
+            case "cardPlayed":
+                HandleCardPlayed(json);
+                break;
+            case "trickComplete":
+                HandleTrickComplete(json);
+                break;
+            case "gameWinner":
+                HandleGameWinner(json);
+                break;
         }
     }
 
@@ -282,12 +294,35 @@ public class WebSocketManager : MonoBehaviour
             case "bidding":
                 EventBus.RaiseGameUpdateBidding(msg);
                 break;
+            case "playing":
+                EventBus.RaiseGameUpdatePlaying(msg);
+                break;
         }
     }
     void HandleRequestBid(string json)
     {
         var msg = JsonUtility.FromJson<RequestBidResponse>(json);
         EventBus.RaiseRequestBid(msg);
+    }
+    void HandleRequestMove(string json)
+    {
+        var msg = JsonUtility.FromJson<RequestMoveResponse>(json);
+        EventBus.RaiseRequestMove(msg);
+    }
+    void HandleCardPlayed(string json)
+    {
+        var msg = JsonUtility.FromJson<CardPlayedResponse>(json);
+        EventBus.RaiseCardPlayed(msg);
+    }
+    void HandleTrickComplete(string json)
+    {
+        var msg = JsonUtility.FromJson<TrickCompleteResponse>(json);
+        EventBus.RaiseTrickComplete(msg);
+    }
+    void HandleGameWinner(string json)
+    {
+        var msg = JsonUtility.FromJson<GameWinnerResponse>(json);
+        EventBus.RaiseGameWinner(msg);
     }
     #endregion
 

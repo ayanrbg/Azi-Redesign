@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
     //[SerializeField] private RectTransform card1;
     public HandView handView;
     public bool isRequestDiscard = false;
-    private bool isFirstGameUpdate = true;
+    public bool isFirstGameUpdate = true;
+    public bool isGameStarted = false;
 
     //public void PlayAnimationCard()
     //{
@@ -44,6 +45,11 @@ public class GameManager : MonoBehaviour
         EventBus.OnGameUpdateDiscarding += LoadGameUpdateDiscarding;
         EventBus.OnGameUpdateBidding += LoadGameUpdateBidding;
         EventBus.OnRequestBid += gameUIController.LoadGameBidding;
+        EventBus.OnRequestMove += gameUIController.LoadRequestMove;
+        EventBus.OnGameUpdatePlaying += LoadGameUpdatePlaying;
+        EventBus.OnCardPlayed += gameUIController.ShowPlayedCards;
+        EventBus.OnTrickComplete += gameUIController.ShowTrickComplete;
+        EventBus.OnGameWinner += gameUIController.ShowGameWinner;
         //EventBus.OnPlayedCard += gameUIController.ShowPlayedCard;
     }
     private void OnDisable()
@@ -55,6 +61,11 @@ public class GameManager : MonoBehaviour
         EventBus.OnGameUpdateDiscarding -= LoadGameUpdateDiscarding;
         EventBus.OnGameUpdateDiscarding -= LoadGameUpdateBidding;
         EventBus.OnRequestBid -= gameUIController.LoadGameBidding;
+        EventBus.OnRequestMove -= gameUIController.LoadRequestMove;
+        EventBus.OnGameUpdatePlaying -= LoadGameUpdatePlaying;
+        EventBus.OnCardPlayed -= gameUIController.ShowPlayedCards;
+        EventBus.OnTrickComplete -= gameUIController.ShowTrickComplete;
+        EventBus.OnGameWinner -= gameUIController.ShowGameWinner;
         //EventBus.OnPlayedCard += gameUIController.ShowPlayedCard;
     }
     
@@ -85,6 +96,8 @@ public class GameManager : MonoBehaviour
         gameUIController.mainTimer.StopTimer();
         gameUIController.timerPanel.SetActive(false);
         gameUIController.LoadTimerCurrentPlayer(response);
+        gameUIController.UnableValidCards();
+        gameUIController.isRequestMove = false;
         if (isFirstGameUpdate)
         {
             StartCoroutine(gameUIController.mainPlayerSlot.LoadCards(response.yourCards));
@@ -99,6 +112,9 @@ public class GameManager : MonoBehaviour
         gameUIController.mainTimer.StopTimer();
         gameUIController.timerPanel.SetActive(false);
         gameUIController.LoadTimerCurrentPlayer(response);
+        gameUIController.UnableValidCards();
+        gameUIController.isRequestMove = false;
+        gameUIController.UpdateCurrentPot(response.pot);
         if (isFirstGameUpdate)
         {
             StartCoroutine(gameUIController.mainPlayerSlot.LoadCards(response.yourCards));
@@ -106,19 +122,22 @@ public class GameManager : MonoBehaviour
         isFirstGameUpdate = false;
 
     }
+    private void LoadGameUpdatePlaying(GameUpdateResponse response)
+    {
+        isRequestDiscard = false; //*
+        gameUIController.mainTimer.StopTimer();
+        gameUIController.timerPanel.SetActive(false);
+        gameUIController.LoadTimerCurrentPlayer(response);
+        gameUIController.UpdateCurrentPot(response.pot);
+        gameUIController.isRequestMove = false;
+        isFirstGameUpdate = false;
+    }
     private void LoadGameEnd()
     {
         isRequestDiscard = false; //*
         isFirstGameUpdate = true;
     }
-    private void SetValidCards(int[] validIndexes)
-    {
-        foreach (var card in handView.cards)
-        {
-            bool isValid = validIndexes.Contains(card.cardOrderId);
-            card.SetBlocked(!isValid);
-        }
-    }
+    
     public void Bet()
     {
         WebSocketManager.Instance.SendBet();
